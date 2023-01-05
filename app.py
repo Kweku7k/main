@@ -1,6 +1,6 @@
 
 import os
-
+import qrcode
 import secrets
 import urllib.request, urllib.parse
 from flask_sqlalchemy import SQLAlchemy
@@ -783,10 +783,10 @@ def usernewform():
     return render_template('usernewform.html', header="Schools / Faculty", smalltitle="2021", name="", numberofentries="16 entries")
 
 
-@app.route('/verify')
+@app.route('/scan')
 @login_required
 def verify():
-    return render_template('scan1.html')
+    return render_template('scan3.html')
 
 
 @app.route('/info')
@@ -795,10 +795,28 @@ def info():
     return render_template('scan2.html')
 
 
-@app.route('/scan')
+@app.route('/verify', methods=['POST','GET'])
 @login_required
 def scan():
-    return render_template('scan3.html')
+    if request.method=='POST':
+        indexNumber = request.form.get("indexNumber")
+        Name = request.form.get("Name")
+        Time = request.form.get("Time")
+        
+        img = qrcode.make( "Student Attendance" + '\n' + 
+                    "Student ID = " + indexNumber  + '\n'
+                    "Student Name = " + Name + '\n' + 
+                    "Student Time = " + Time )
+        
+        type(img)  #qrcode.image.pil.PilImage
+        img.save("static/img/qrcode.png")
+        sendtelegram( 
+                      "Student ID = " + indexNumber  + '\n' 
+                      "Student Name = " + Name + '\n' + 
+                      "Student Time = " + Time 
+           )
+        return redirect(url_for('info'))
+    return render_template('scan1.html')
 
 
 @app.route('/userschool')
