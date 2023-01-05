@@ -71,7 +71,7 @@
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-        <div class="alert alert-danger mb-3" role="alert">
+        <div class="alert alert-success mb-3" role="alert">
             {{ message }} 
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -101,7 +101,7 @@
     
 
     <div class="ade" style="display: flex; justify-content: space-between;">
-      <button class="btn" style="color: #fff; background: #00008B; border: none; margin-left: 2vw;" type="submit">+ Create A New Task</button>
+     <a href="/info"> <button class="btn" style="color: #fff; background: #00008B; border: none; margin-left: 2vw;" type="submit">Scan my code</button></a>
         
      
       <a href="" style="text-decoration: none; background-color:#e62626; border-radius:100px; height:40px; width:40px; text-align:center; padding:8px; color: #fff;">
