@@ -1,46 +1,107 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleland.css')}}">
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<title>Myworkspace</title>
-</head>
-<body>
+{% extends 'userlayout.html' %}
 
-	<div class="load">
-		<hr/><hr/><hr/><hr/>
-	  </div>
-<!--
-		<div class="dots-container">
-			<div class="dots"></div>
-			<div class="dots"></div>
-			<div class="dots"></div>
-			<div class="dots"></div>
-			<div class="dots"></div><br>
-			<a href="/userlogin"><h4 style="background-color:#00008B;  border-radius:7px; border:none; color:#fff;  width:100px; margin:auto; margin-top:20px; text-decoration:none; padding:10px;">Welcome</h4></a>
-		  </div>-->
-	 
-	 <!-- <span class="loader"><span class="loader-inner"></span></span>-->
-	<!--<div class="wrapper" style="margin-top:20px;">
-		<div class="typing-demo">
-		Welcome to <span >Myworkspace</span>
-		</div>
-	</div>-->
-	<!--
-	<div id=container>
-		 
-		<div id=flip>
-		  <div><div>workspace</div></div>
-		  <div><div>to</div></div>
-		  <div><div>welcome</div></div>
-		</div>
+{% block div %}
+<div class="container" style=" border-radius:10px 0 0 150px; padding: 20px; background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(84,84,201,1) 0%, rgba(0,212,255,1) 100%);">
+  
+  <div class="row">
+    
+
+
 		
-		
-	  </div>-->
-	  
-	  <a href="/userlogin"><p>myworkspace</p></a>
+		<a href="/useryeargroup"><img src="static/img/arr.png" alt=""style="width:30px; height:27px;"  ></a>
+			
+
+
+   
+    <div class="ade" style="display: flex; justify-content: space-between;">
+         <img src="static/img/memoji.png" alt=""style="width:190px; height:180px;"  >
+        
+     
+         <a href="" style="text-decoration: none; color: #fff; margin-top:60px; margin-right:20px;">
+          <h3><b>Create your <span style="font-size:30px;"> Taskspace</span><b></h3>
+          <h6>in a minute.</h6>
+        </a>
+    </div>
+    </div>
+    
+
+    <div class="ade" style="display: flex; justify-content: space-between;">
+   
+		<a href="/info"> <button class="btn" style="color: #fff; background: #00008B; border: none; margin-left: 2vw;" type="submit">Scan my code</button></a>
+          
+     
+      <a href="" style="text-decoration: none; background-color:#e62626; border-radius:100px; height:40px; width:40px; text-align:center; padding:8px; color: #fff;">
+        <h6 style="margin-top:2px;">+</h6>
+      </a>
+    </div>
+    </div>
+    
+
+  </div>
+  <br>
+ 
+
+
+{% endblock div %}
+
+{% block body %}
+
+ 
+
+
+<div class="row" style="text-align: center; margin: auto;">
+	<div class="col-md-2 col-6">
+	  <div class="user-box">
+		<h2 style="margin-bottom: 3vh; font-size:30px; text-align:left; font-weight: bold;"><i class='bx bxs-calendar icon' style="margin-right:70px;" ></i>0</h2>
 	
-</body>
-</html>
+		<a href="#" style="text-decoration: none; background-color:#5454c9;">
+		  <h4 class="user-box-items"  style="margin-bottom: 3vh; font-size:15px; text-align:left; font-weight: bold;">Today</h4>
+		</a>
+		 
+	  </div>
+	</div>
+	
+	<div class="col-md-2 col-6">
+	  <div class="user-box">
+		<h4 style="margin-bottom: 3vh; font-size:30px; text-align:left; font-weight: bold;"> <i class='bx bx-add-to-queue icon'style="margin-right:70px;" ></i>0</h4>
+	
+		<a href="#" style="text-decoration: none;">
+		  <h4 class="user-box-items"  style="margin-bottom: 3vh; font-size:15px; text-align:left; font-weight: bold;">Scheduled</h4>
+		</a>
+		  
+	  </div>
+	</div>
+	
+	<div class="col-md-2 col-6">
+	  <div class="user-box">
+		<h4 style="margin-bottom: 3vh; font-size:30px; text-align:left; font-weight: bold;"><i class='bx bxs-dashboard icon' style="margin-right:70px;"></i>0</h4>
+	
+		<a href="#" style="text-decoration: none;">
+		  <h4 class="user-box-items"  style="margin-bottom: 3vh; font-size:15px; text-align:left; font-weight: bold;">All</h4>
+		</a>
+		  
+	  </div>
+	</div>
+	
+	<div class="col-md-2 col-6">
+	  <div class="user-box">
+		<h4 style="margin-bottom: 3vh; font-size:30px; text-align:left; font-weight: bold;"><span><i class='bx bxs-exit icon' style="margin-right:70px;"></i></span>0</h4>
+	
+		<a href="#" style="text-decoration: none;">
+		  <h4 class="user-box-items"  style="margin-bottom: 3vh; font-size:15px; text-align:left; font-weight: bold;">Completed</h4>
+		</a>
+		
+	  </div>
+	</div>
+	<div class="col">
+		<div class="user-box">
+		  <h4 style="margin-bottom: 3vh; font-size:10px; text-align:left; font-weight: bold;"><i class='bx bxs-exit icon'></i>Set Reminders</h4>
+	  
+
+		  
+		</div>
+	  </div>	
+  </div>
+  
+
+{%endblock body%}
