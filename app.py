@@ -789,6 +789,14 @@ def verify():
     return render_template('scan3.html')
 
 
+@app.route('/dash')
+@login_required
+def dash():
+    student(indexNumber=request.form.get,name=request.form.get)
+    print(student)
+    return render_template('dash.html', student=student)
+
+
 @app.route('/info')
 @login_required
 def info():
