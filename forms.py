@@ -39,9 +39,11 @@ class LoginForm(FlaskForm):
  
 class Registration(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
-    indexnumber = StringField('indexnumber')
+    indexnumber = StringField('indexnumber', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     phone= StringField('phone')
+    program= StringField('program', validators=[DataRequired()])
+    school= StringField('school', validators=[DataRequired()])
    
     submit = SubmitField('SignUp')  
     # el4 = SelectField('el4', default='None', choices=[(user.lastname, user.lastname) for user in Person.query.all()])  

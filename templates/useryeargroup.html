@@ -2,11 +2,21 @@
 
 {% block body %}
 
+<script src="loading-screen.js"></script>
 
-
-
+<div class="container" >
 <div class="row" style="text-align: center; margin: auto;">
-  <div class="col-md-2 col-6">
+   
+  <div class="col-6 col-md-6">
+    <div class="user-box">
+      <a href="/usernewform" style="text-decoration: none;">
+        <h4 class="user-box-items" style="margin-bottom: 3vh; font-weight: bold;">Profile</h4>
+      </a>
+        <h6 class="text-muted">Level {{current_user.school}} <br>{{current_user.email}}</h6> 
+    </div>
+  </div>
+
+  <div class="col-6 col-md-6">
     <div class="user-box">
       <a href="/userbase" style="text-decoration: none; background-color:#5454c9;">
         <h4 class="user-box-items" style="margin-bottom: 3vh; font-weight: bold;">Assignment</h4>
@@ -14,35 +24,62 @@
         <h6 class="text-muted">Students<br> Outline</h6> 
     </div>
   </div>
+ 
   
-  <div class="col-md-2 col-6">
-    <div class="user-box">
-      <a href="/usernewform" style="text-decoration: none;">
-        <h4 class="user-box-items" style="margin-bottom: 3vh; font-weight: bold;">Program</h4>
-      </a>
-        <h6 class="text-muted">Level <br>300</h6> 
-    </div>
-  </div>
-  
-  <div class="col-md-2 col-6">
-    <div class="user-box">
-      <a href="/scan" style="text-decoration: none;">
-        <h4 class="user-box-items" style="margin-bottom: 3vh; font-weight: bold;">Attendance</h4>
-      </a>
-        <h6 class="text-muted">Verify <br>Attendance </h6> 
-    </div>
-  </div>
-  
-  <div class="col-md-2 col-6">
-    <div class="user-box">
+ 
+  <div class="col-6 col-md-6">
+    <div class="user-box" >
       <a href="/index" style="text-decoration: none;">
         <h4 class="user-box-items" style="margin-bottom: 3vh; font-weight: bold;">My Task</h4>
       </a>
         <h6 class="text-muted">Teaching <br> Assistant</h6> 
     </div>
   </div>
+  <div class="col-6 col-md-6" >
+    <div class="user-box"  >
+      <a href="/steve" style="text-decoration: none;">
+        <h4 class="user-box-items" style="margin-bottom: 3vh; font-weight: bold;">Ask Steve</h4>
+      </a>
+        <h6 class="text-muted">Campus<br>Ask Bot</h6> 
+    </div>
+  </div>
+  
+  <div class="col-6 col-md-6">
+    
+    <div class="user-box" >
+
+      <a href="/scan" style="text-decoration: none;">
+        <h4 class="user-box-items" style="margin-bottom: 3vh; font-weight: bold;">Attendance</h4>
+      </a>
+        <h6 class="text-muted">Verify <br>Attendance </h6> 
+    </div>
+    
+  </div>
+  
+  
+  <div class="col-6 col-md-6">
+    <div class="user-box" >
+      <a href="#" style="text-decoration: none;">
+        <h4 class="user-box-items" style="margin-bottom: 3vh; font-weight: bold;">Direction</h4>
+      </a>
+        <h6 class="text-muted">Locate<br> Me </h6> 
+    </div>
+   
+    
+  </div>
+ 
+
+ 
+  </div>
+  
+
   
 </div>
+
+</div>
+
+</div>
+
 
 {% endblock body %}
 

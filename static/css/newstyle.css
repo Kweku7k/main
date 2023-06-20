@@ -325,7 +325,7 @@ h4 {
 .chatroomMask .chatroomInfomation .ci_title {
   border-bottom:solid 1px #e5e9ee;
   margin:0;padding:10px 15px;margin-bottom:10px;
-  color:#1b355e;letter-spacing:1px;
+  color:#5e2e1b;letter-spacing:1px;
   background:white;height:64px;overflow:hidden;
 }
 .chatroomMask .chatroomInfomation .ci_detail {
@@ -373,5 +373,6 @@ h4 {
   border:none;color:white;height:30px;
   line-height:30px;padding:0 10px;
   border-radius:1px;
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgb(236, 18, 37) 0%, rgb(223, 29, 61) 100%);
 }
   

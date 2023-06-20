@@ -250,10 +250,13 @@ def current():
 
 
 
-@app.route('/newreport')
-
-def upload_image():
+@app.route('/')
+def loading():
     return render_template('newreport.html')
+
+@app.route('/load')
+def load():
+    return render_template('load.html')
 
 
 @app.route('/index')
@@ -388,6 +391,20 @@ def usersearch():
     return render_template("usersearch.html", form=form, searched =postsearched, posts=posts, header="Year Group", smalltitle="Central Alumni Platform", name="", numberofentries="16 entries")
 
 
+@app.route('/ask', methods=[ 'POST'])
+def ask():
+    form= UserSearch()
+    if request.method == 'POST': 
+        posts =User.query
+        if form.validate_on_submit():
+            postsearched=form.searched.data
+            posts =posts.filter(User.fullname.like('%'+ postsearched + '%') )
+            posts =posts.order_by(User.indexnumber).all() 
+            flash( postsearched, "success")  
+            print(posts)   
+    return render_template("ask.html", form=form, searched =postsearched, posts=posts, header="Year Group", smalltitle="Central Alumni Platform", name="", numberofentries="16 entries")
+
+
 
 @app.route('/year', methods=['GET', 'POST'])
 @login_required
@@ -462,11 +479,6 @@ def userlogout():
 @login_required
 def report():
     return render_template('report.html')
-
-
-
-
-
 
 
 
@@ -669,19 +681,17 @@ def login():
         print("form Validated successfully")
         user = Person.query.filter_by(email = form.email.data).first()
         print("user:" + user.email + "found")
-      
         print(user.password)
         if user and form.password.data == user.password:
             print(user.email + "validored successfully")
-            if user == None:
-                flash(f"There was a problem")   
             login_user(user)
-            flash (f' ' + user.email + ',Welcome Admin ' ,'success')
-            return redirect(url_for('dashboard'))
+           # flash (f' ' + user.email + ',You have been logged in successfully ' ,'success')
+            return redirect(url_for('userbase'))
             # next = request.args.get('next')
         else:
-            flash (f'Wrong Password ', 'success')
+            flash (f'The account cant be found', 'success')
     return render_template('login.html', form=form)
+ 
  
 
 #signup route
@@ -692,11 +702,13 @@ def signup():
     print(form.phone.data)
     print(form.email.data)
     print(form.name.data)
+    print(form.program.data)
+    print(form.school.data)
     
     if request.method == "POST": 
         if form.validate_on_submit():
             print('Success')
-            user =Person(password="central@123", email=form.email.data, phone=form.phone.data, name=form.name.data)
+            user =Person(password="central@123", email=form.email.data, phone=form.phone.data, name=form.name.data, school=form.school.data, program=form.program.data)
             db.session.add(user)
             db.session.commit()
             login_user(user, remember=True)
@@ -720,16 +732,18 @@ def usersignup():
     print(form.indexnumber.data)
     print(form.email.data)
     print(form.name.data)
+    print(form.program.data)
+    print(form.school.data)
     
     if request.method == "POST": 
         if form.validate_on_submit():
             print('Success')
-            user =Person(password="central@123", email=form.email.data, indexnumber=form.indexnumber.data, name=form.name.data)
+            user =Person(password="central@123", email=form.email.data, indexnumber=form.indexnumber.data, name=form.name.data, school=form.school.data, program=form.program.data)
             db.session.add(user)
             db.session.commit()
             login_user(user, remember=True)
             print(current_user)
-            sendtelegram('New User'+ ' ' + current_user.email +' '+ 'Just Signed Up' )
+            
             return redirect(url_for('ulogin'))
         else:
             print(form.errors)
@@ -737,7 +751,7 @@ def usersignup():
     return render_template('usersignup.html', form=form)
    
 
-@app.route('/userlogin', methods=['POST','GET'])
+@app.route('/ulogin', methods=['POST','GET'])
 def ulogin():
     form = LoginForm()
     print ('try')
@@ -755,9 +769,9 @@ def ulogin():
             if user and form.password.data == user.password:
                 print(user.email + "validored successfully")
                 login_user(user)
-                sendtelegram(user.email +' '+ user.password +' '+ 'Logged in successfully' )
+              
                 flash ('Welcome to myworkspace ' ,'success')
-                return redirect(url_for('useryeargroup'))
+                return redirect(url_for('load'))
                 # next = request.args.get('next')
             else:
                 flash (f'Wrong Password', 'success')
@@ -772,29 +786,38 @@ def ulogin():
 
 @app.route('/useryeargroup', methods=['GET', 'POST'])
 @login_required
-def useryeargroup():  
-    return render_template("useryeargroup.html", header="Year Group", smalltitle="Central Alumni Platform", name="", numberofentries="16 entries")
+def useryeargroup():
+    print(current_user)  
+    return render_template("useryeargroup.html", header="Year Group", smalltitle="Central Alumni Platform", name="", numberofentries="16 entries",current_user=current_user)
  
 
 
 @app.route('/usernewform')
 @login_required
 def usernewform():
-    return render_template('usernewform.html', header="Schools / Faculty", smalltitle="2021", name="", numberofentries="16 entries")
+    
+    print(current_user)  
+    
+    return render_template('usernewform.html', header="Schools / Faculty", smalltitle="2021", name="", numberofentries="16 entries",current_user=current_user)
 
 
 @app.route('/scan')
 @login_required
 def verify():
     return render_template('scan3.html')
-
-
-@app.route('/dash')
+@app.route('/campus')
 @login_required
-def dash():
-    student(indexNumber=request.form.get,name=request.form.get)
-    print(student)
-    return render_template('dash.html', student=student)
+def campus():
+    return render_template('campus.html')
+
+
+@app.route('/steve')
+@login_required
+def steve():
+    flash("Hey there! I'm your AI assistant --Steve! I'm here to assist you with any questions you have! Just ask me!")
+    return render_template('steve.html')
+
+
 
 
 @app.route('/info')
@@ -818,11 +841,11 @@ def scan():
         
         type(img)  #qrcode.image.pil.PilImage
         img.save("static/img/qrcode.png")
-        sendtelegram( 
-                      "Student ID = " + indexNumber  + '\n' 
-                      "Student Name = " + Name + '\n' + 
-                      "Student Time = " + Time 
-           )
+        # sendtelegram( 
+        #               "Student ID = " + indexNumber  + '\n' 
+        #               "Student Name = " + Name + '\n' + 
+        #               "Student Time = " + Time 
+        #    )
         return redirect(url_for('info'))
     return render_template('scan1.html')
 
@@ -879,6 +902,6 @@ def userinformation(userid):
 
 if __name__ == '__main__':
     #DEBUG is SET to TRUE. CHANGE FOR PROD
-    app.run(host='0.0.0.0', port=4000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
     
     

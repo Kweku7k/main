@@ -1,21 +1,231 @@
-{% extends 'userlayout.html' %}
-{% block body %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/newstyle.css')}}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <title>Bootstrap demo</title>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  </head>
+  <body>
+{% block div %}
+<div class="container" style=" border-radius:10px 0 0 150px; padding: 20px; background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(84,84,201,1) 0%, rgba(0,212,255,1) 100%);">
+  <nav class="navbar bg-light fixed-top">
+    <div class="container-fluid">
+
+      <h5 style=" color: #5454c9;" ><b>Hi, {{current_user.name}}<b> </h5>
+      
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"  style="  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(84,84,201,1) 0%, rgba(0,212,255,1) 100%);">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" >
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Hello, {{current_user.name}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Assignment</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('userlogout')}}">Logout</a></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Attendance</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Course</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+          </ul>
+         
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="row">
+    <h6 class="text-muted"  >Project Outline</h6>
+    
+   
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success mb-3" role="alert">
+            {{ message }} 
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+    
+  
+
+    <form class="d-flex " role="search" style="margin-top: 3vh; "  method='POST' action='{{url_for('usersearch')}}'>
+      {{form.hidden_tag()}}
+      <input class="form-control " type="search"name='searched'  placeholder="Search for a particular course" aria-label="Search">
+      <button class="btn" style="color: #fff; background: #00008B; border: none; margin-left: 2vw;" type="submit">Enter</button>
+        
+    </form>  
+    <div class="ade" style="display: flex; justify-content: space-between;">
+         <img src="static/img/memoji.png" alt=""style="width:190px; height:180px;"  >
+        
+     
+         <a href="" style="text-decoration: none; color: #fff; margin-top:60px; margin-right:20px;">
+          <h3 style="font-size:15px;"><b>Hello,<br> <span style="font-size:30px;">{{current_user.name}}</span><b></h3>
+          <h6>Checkout Your Profile</h6>
+        </a>
+    </div>
+    </div>
+    
+
+    <div class="ade" style="display: flex; justify-content: space-between;">
+     <a href="/info"> <button class="btn" style="color: #fff; background: #00008B; border: none; margin-left: 2vw;" type="submit">Scan my code</button></a>
+        
+     
+      <a href="/index" style="text-decoration: none; background-color:#e62626; border-radius:100px; height:40px; width:40px; text-align:center; padding:8px; color: #fff;">
+        <h6 style="margin-top:2px;">+</h6>
+      </a>
+    </div>
+    </div>
+    
+
+  </div>
+  <br>
+ 
+  {% endblock div %}
+
 <div style="display: flex; border-bottom: 3px solid #f2f2f2;">
-  <div class="user-pic" style="padding-right: 10px;">
-      <img src="static/img/memoji.png" >
+  <div class="user-pic" style="padding-right: 30px;">
+     
   </div>
   <div class="user-text">
       <div>
           <a href="/userschool" style="text-decoration: none;">
-              <h4>School of Engineering and Technology </h4>
+              <h4>Full Name</h4>
           </a>
-          <h6 class="text-muted">23 Students</h6>
+          <h6 class="text-muted">{{current_user.name}}</h6>
       </div>
       <div>
+
+        
           <i class='bx bx-dots-vertical-rounded bx-sm icon'></i>
       </div>
   </div>
 </div>
 
 
-{% endblock body %}
+<div style="display: flex; border-bottom: 3px solid #f2f2f2;">
+    <div class="user-pic" style="padding-right: 30px;">
+       
+    </div>
+    <div class="user-text">
+        <div>
+            <a href="/userschool" style="text-decoration: none;">
+                <h4>Email</h4>
+            </a>
+            <h6 class="text-muted">{{current_user.email}}</h6>
+        </div>
+        <div>
+  
+          
+            <i class='bx bx-dots-vertical-rounded bx-sm icon'></i>
+        </div>
+    </div>
+  </div>
+
+
+<div style="display: flex; border-bottom: 3px solid #f2f2f2;">
+    <div class="user-pic" style="padding-right: 30px;">
+       
+    </div>
+    <div class="user-text">
+        <div>
+            <a href="/userschool" style="text-decoration: none;">
+                <h4>Program</h4>
+            </a>
+            <h6 class="text-muted">{{current_user.program}}</h6>
+        </div>
+        <div>
+  
+          
+            <i class='bx bx-dots-vertical-rounded bx-sm icon'></i>
+        </div>
+    </div>
+  </div>
+
+
+  <div style="display: flex; border-bottom: 3px solid #f2f2f2;">
+    <div class="user-pic" style="padding-right: 30px;">
+       
+    </div>
+    <div class="user-text">
+        <div>
+            <a href="/userschool" style="text-decoration: none;">
+                <h4>Level</h4>
+            </a>
+            <h6 class="text-muted">{{current_user.school}}</h6>
+        </div>
+        <div>
+  
+          
+            <i class='bx bx-dots-vertical-rounded bx-sm icon'></i>
+        </div>
+    </div>
+  </div>
+
+
+  <div style="display: flex; border-bottom: 3px solid #f2f2f2;">
+    <div class="user-pic" style="padding-right: 30px;">
+       
+    </div>
+    <div class="user-text">
+        <div>
+            <a href="/userschool" style="text-decoration: none;">
+                <h4>ID Number</h4>
+            </a>
+            <h6 class="text-muted">{{current_user.indexnumber}}</h6>
+        </div>
+        <div>
+  
+          
+            <i class='bx bx-dots-vertical-rounded bx-sm icon'></i>
+        </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+
+</body>
+</html>
