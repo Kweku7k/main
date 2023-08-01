@@ -1,107 +1,84 @@
-{% extends 'userlayout.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
-{% block div %}
-<div class="container" style=" border-radius:0 0 0 150px; padding: 20px; background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(84,84,201,1) 0%, rgba(0,212,255,1) 100%);">
-  
-  <div class="row">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1>API</h1>
+    <button onclick="fetchData()">Fetch Data</button>
+
+
+<div class="container" id="apiTable">
+    <div class="row" style="padding:20px;">
+
+       <a href="/name"> <div class="col-6 col-lg-3" style="padding:20px; width:200px;">
+            <h6>Name</h6>
+        </div></a>
+
+        <div class="col-6 col-lg-3" style="padding:20px; width:200px;">
+            <h6>Department</h6>
+        </div>
+
+        <div class="col-6 col-lg-3" style="padding:20px; width:200px;">
+            <h6>School</h6>
+        </div>
+
+        <div class="col-6 col-lg-3" style="padding:20px; width:200px;">
+            <h6>Program</h6>
+        </div>
+
+    </div>
+</div>
     
+        <tbody id="apiResult">
+            <tr>
+            <td>${item.id}</td>
+            </tr>
+        </tbody>
+    </table>
 
 
-		
-		<a href="/useryeargroup"><img src="static/img/arr.png" alt=""style="width:30px; height:27px;"  ></a>
-			
 
 
-   
-    <div class="ade" style="display: flex; justify-content: space-between;">
-         <img src="static/img/memoji.png" alt=""style="width:190px; height:180px;"  >
-        
-     
-         <a href="" style="text-decoration: none; color: #fff; margin-top:60px; margin-right:20px;">
-          <h3><b>Create your <span style="font-size:30px;"> Taskspace</span><b></h3>
-          <h6>in a minute.</h6>
-        </a>
-    </div>
-    </div>
+
+
     
+    <script>
+        function fetchData() {
+            const apiUrl = 'http://172.16.12.48:5000/department'; 
 
-    <div class="ade" style="display: flex; justify-content: space-between;">
-   
-		<a href="/info"> <button class="btn" style="color: #fff; background: #00008B; border: none; margin-left: 2vw;" type="submit">Scan my code</button></a>
-          
-     
-      <a href="" style="text-decoration: none; background-color:#e62626; border-radius:100px; height:40px; width:40px; text-align:center; padding:8px; color: #fff;">
-        <h6 style="margin-top:2px;">+</h6>
-      </a>
-    </div>
-    </div>
-    
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    displayData(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
 
-  </div>
-  <br>
- 
+        function displayData(data) {
+            const apiResultTbody = document.getElementById('apiResult');
 
+            // Clear previous table rows if any
+            apiResultTbody.innerHTML = '';
 
-{% endblock div %}
-
-{% block body %}
-
- 
-
-
-<div class="row" style="text-align: center; margin: auto;">
-	<div class="col-md-2 col-6">
-	  <div class="user-box">
-		<h2 style="margin-bottom: 3vh; font-size:30px; text-align:left; font-weight: bold;"><i class='bx bxs-calendar icon' style="margin-right:70px;" ></i>0</h2>
-	
-		<a href="#" style="text-decoration: none; background-color:#5454c9;">
-		  <h4 class="user-box-items"  style="margin-bottom: 3vh; font-size:15px; text-align:left; font-weight: bold;">Today</h4>
-		</a>
-		 
-	  </div>
-	</div>
-	
-	<div class="col-md-2 col-6">
-	  <div class="user-box">
-		<h4 style="margin-bottom: 3vh; font-size:30px; text-align:left; font-weight: bold;"> <i class='bx bx-add-to-queue icon'style="margin-right:70px;" ></i>0</h4>
-	
-		<a href="#" style="text-decoration: none;">
-		  <h4 class="user-box-items"  style="margin-bottom: 3vh; font-size:15px; text-align:left; font-weight: bold;">Scheduled</h4>
-		</a>
-		  
-	  </div>
-	</div>
-	
-	<div class="col-md-2 col-6">
-	  <div class="user-box">
-		<h4 style="margin-bottom: 3vh; font-size:30px; text-align:left; font-weight: bold;"><i class='bx bxs-dashboard icon' style="margin-right:70px;"></i>0</h4>
-	
-		<a href="#" style="text-decoration: none;">
-		  <h4 class="user-box-items"  style="margin-bottom: 3vh; font-size:15px; text-align:left; font-weight: bold;">All</h4>
-		</a>
-		  
-	  </div>
-	</div>
-	
-	<div class="col-md-2 col-6">
-	  <div class="user-box">
-		<h4 style="margin-bottom: 3vh; font-size:30px; text-align:left; font-weight: bold;"><span><i class='bx bxs-exit icon' style="margin-right:70px;"></i></span>0</h4>
-	
-		<a href="#" style="text-decoration: none;">
-		  <h4 class="user-box-items"  style="margin-bottom: 3vh; font-size:15px; text-align:left; font-weight: bold;">Completed</h4>
-		</a>
-		
-	  </div>
-	</div>
-	<div class="col">
-		<div class="user-box">
-		  <h4 style="margin-bottom: 3vh; font-size:10px; text-align:left; font-weight: bold;"><i class='bx bxs-exit icon'></i>Set Reminders</h4>
-	  
-
-		  
-		</div>
-	  </div>	
-  </div>
-  
-
-{%endblock body%}
+            // Loop through the data and create table rows
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.department}</td>
+                    <td>${item.school}</td>
+                    <td>${item.program}</td>
+                `;
+                apiResultTbody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
