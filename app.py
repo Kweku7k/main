@@ -13,7 +13,7 @@ app=Flask(__name__)
 
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-app.config['SECRET_KEY'] =" thisismysecretkey"
+app.config['SECRET_KEY'] =" thisismysecretkeys"
 #'postgresql://postgres:new_password@45.222.128.225:5432/postgres'
 
 db = SQLAlchemy(app)
