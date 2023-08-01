@@ -100,11 +100,12 @@ class Staff(db.Model):
    
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
 
+    def __repr__(self):
+        return f"staff('{self.id}', {self.firstname}', {self.osition})"
+    
 
-
-
-    class Employment(db.Model):
-     date_of_appointment = db.Column(db.Date)
+class Employment(db.Model):
+    date_of_appointment = db.Column(db.Date)
     date_of_appointment = db.Column(db.Date)
     end_of_contract = db.Column(db.Date)
 
