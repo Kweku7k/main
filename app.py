@@ -405,15 +405,12 @@ def getalldepartments():
                             "department": department.department,
                             "program": department.program}
                         for department in post_department]
-        
-        # response_body = {
-        #     "data":post_department
-        # }
+
     return departments_data
         
        
     
-@app.route('/departments/<int:department_id>', methods=['PUT'])
+@app.route('/api/v2/departments/<int:department_id>', methods=['PUT'])
 def update_department(department_id):
     if request.method == 'PUT':
         department = Department.query.get(department_id)
@@ -429,12 +426,12 @@ def update_department(department_id):
         
         # Convert the School objects to a list of dictionaries (JSON serializable)
         departments_data = [{"name": department.name, 
-                            "id":department.id,
+                             "id":department.id,
                             "school": department.school,
                             "department": department.department,
                             "program": department.program}
                         for department in post_department]
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         department = Department.query.get(department_id)
 
         db.session.delete(department)
@@ -443,6 +440,7 @@ def update_department(department_id):
         
         # Convert the School objects to a list of dictionaries (JSON serializable)
         departments_data = [{"name": department.name, 
+                             "id":department.id,
                             "school": department.school,
                             "department": department.department,
                             "program": department.program}
