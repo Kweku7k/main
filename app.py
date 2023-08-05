@@ -118,18 +118,21 @@ class ID(db.Model):
     immigration_number = db.Column(db.String(100))
     address = db.Column(db.String(200))
   
+
 class Financial(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     bank_number = db.Column(db.String(100))
     bank_name = db.Column(db.String(100))
     bank_branch = db.Column(db.String(100))
-   
+    
+    
 class Dependent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     next_of_kin = db.Column(db.String(100))
     relationship = db.Column(db.String(100))
     address_kin = db.Column(db.String(100))
     gender_kin = db.Column(db.String(100))
+
 
 
 class Beneficianies(db.Model):
@@ -139,11 +142,14 @@ class Beneficianies(db.Model):
     other_beneficianies= db.Column(db.String(100))
     gender_beneficianies= db.Column(db.String(100))
    
+   
+   
 @app.route('/', methods=['GET', 'POST'])
 def base():
     return render_template("base.html")
 
-@app.route('/dashboard', methods=['GET', 'POST'])
+
+@app.route('/staff', methods=['GET', 'POST'])
 def uploadCsv():
     responseArray = []
     if request.method == 'POST':
@@ -193,14 +199,6 @@ def uploadCsv():
             )
             print(newStaff)
             db.session.add(newStaff)
-
-            # newLecturer = Lecturer(
-            #     name = line["Lecturer"],
-            #     phone = "N/A",
-            #     email = "N/A"
-            # )
-            # db.session.add(newLecturer)
-
         db.session.commit()
 
         response = {
@@ -293,7 +291,7 @@ def getallschools():
     return schools_data
 
 #STUDENT UPDATE
-@app.route('/api/v1/schools/<int:school_id>', methods=['PUT'])
+@app.route('/api/v1/schools/<int:school_id>', methods=['PUT', 'DELETE'])
 def update_school(school_id):
     if request.method == 'PUT':
         school = School.query.get(school_id)
@@ -374,7 +372,7 @@ def department_view():
         pprint.pprint(responseArray)
     return render_template('departments.html', response=responseArray)
    
-@app.route("/api/v2/departments", methods=['GET', 'POST'])
+@app.route("/api/v1/departments", methods=['GET', 'POST'])
 def getalldepartments():
     if request.method == 'GET':
         departments = Department.query.order_by(Department.id.desc()).all()
@@ -410,7 +408,7 @@ def getalldepartments():
         
        
     
-@app.route('/api/v2/departments/<int:department_id>', methods=['PUT'])
+@app.route('/api/v1/departments/<int:department_id>', methods=['PUT', 'DELETE'])
 def update_department(department_id):
     if request.method == 'PUT':
         department = Department.query.get(department_id)
@@ -451,13 +449,16 @@ def update_department(department_id):
 
 
 
-#    def get_students_html():  
-#     responseArray = students()
-#     return render_template("dashboard.html", responseArray=responseArray)
-
-
-@app.route("/students", methods=['GET', 'POST'])
-def handle_students():
+@app.route('/students', methods=['GET', 'POST'])
+def students_view():
+    if request.method == 'GET':
+        responseArray = getallstudents()
+        print(responseArray)
+        pprint.pprint(responseArray)
+    return render_template('students.html', response=responseArray)
+   
+@app.route("/api/v1/students", methods=['GET', 'POST'])
+def getallstudents():
     if request.method == 'GET':
         students = Student.query.order_by(Student.id.desc()).all()
         students_data = [{
@@ -502,20 +503,14 @@ def handle_students():
                             "current_company":student.current_company,
                             "socials":student.socials}
                         for student in post_student]
+    return students_data
         
-        # response_body = {
-        #     "data":post_student
-        # }
-        #return jsonify(students_data)
-        print(students_data)
-        pprint.pprint(students_data)
-    return render_template("departments.html", response=students_data)
           
     
 #STUDENT UPDATE
-@app.route('/students/<int:student_id>', methods=['PUT'])
+@app.route('/api/v1/students/<int:student_id>', methods=['PUT','DELETE'])
 def update_students(student_id):
-    #try:
+    if request.method == "PUT":
         # Fetch the student record by ID
         student = Student.query.get(student_id)
         body = request.get_json()
@@ -529,6 +524,7 @@ def update_students(student_id):
         post_student = Student.query.order_by(Student.id.desc()).all()
         
         students_data = [{"name": student.name, 
+                          "id":student.id,
                             "school": student.school,
                             "department": student.department,
                             "program": student.program,
@@ -539,15 +535,7 @@ def update_students(student_id):
                             "current_company":student.current_company,
                             "socials":student.socials}
                         for student in post_student]
-        
-        response_body = {
-            "data":post_student
-        }
-        return jsonify(students_data)
-
-#STUDENT DELETE
-@app.route('/students/<int:student_id>', methods=['DELETE'])
-def delete_student(student_id):
+    elif request.method == 'DELETE':
         student = Student.query.get(student_id)
         db.session.delete(student)
         db.session.commit()
@@ -568,7 +556,13 @@ def delete_student(student_id):
                             "socials":student.socials}
                         for student in post_student]
         
-        return jsonify(students_data)
+    return students_data
+
+
+
+
+
+
 
 
 @app.route("/years", methods=['GET', 'POST'])
