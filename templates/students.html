@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+
+               
+
+  <h4>Students</h4>
+  <br>
+  
+  <div class="row" style="justify-content: space-between;">
+      {% for item in response %}
+      <div class="col-md-4 ">
+      <div class="dashboard-item" data-aos="fade-up">
+        <div style="display:flex;">
+            <div class="elipse" style="background: #992621; border-radius: 50%; width:70px; height:70px;">
+                <img src="static/img/memoji.png" alt="" width="100%" >
+              </div>
+              
+        <p class="text-muted" style="margin-left:20px; font-size:20px;">{{ item.name }}<br><span class="dashboard-item-text">{{ item.email}}</span></p>
+    </div>
+
+      </div>
+    </div>
+    {% endfor %}
+    
+  </div>
+  
+  {% endblock body %}

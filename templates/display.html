@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Data Display</title>
+</head>
+<body>
+    <h1>CSV Data Display</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>UssdCode</th>
+                <!-- Add more headers if needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.get("Id", "null") }}</td>
+                <td>{{ item.get("Name", "null") }}</td>
+                <td>{{ item.get("UssdCode", "null") }}</td>
+                <!-- Add more columns if needed -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
