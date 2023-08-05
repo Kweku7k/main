@@ -415,44 +415,38 @@ def getalldepartments():
     
 @app.route('/departments/<int:department_id>', methods=['PUT'])
 def update_department(department_id):
-    department = Department.query.get(department_id)
-    if not department:
-        return jsonify({'error': f'Department with ID #{department_id} not found.'}), 404
+    if request.method == 'PUT':
+        department = Department.query.get(department_id)
+        if not department:
+            return jsonify({'error': f'Department with ID #{department_id} not found.'}), 404
 
-    body = request.get_json()
-    for key, value in body.items():
-        setattr(department, key, value)
+        body = request.get_json()
+        for key, value in body.items():
+            setattr(department, key, value)
 
-    db.session.commit()
-    post_department = Department.query.order_by(Department.id.desc()).all()
-    
-     # Convert the School objects to a list of dictionaries (JSON serializable)
-    departments_data = [{"name": department.name, 
-                         "id":department.id,
-                         "school": department.school,
-                        "department": department.department,
-                        "program": department.program}
-                    for department in post_department]
-    
-    # response_body = {
-    #     "data":post_department
-    # }
-    return departments_data
-# Route for handling DELETE requests to delete a department
-@app.route('/departments/<int:department_id>', methods=['DELETE'])
-def delete_department(department_id):
-    department = Department.query.get(department_id)
+        db.session.commit()
+        post_department = Department.query.order_by(Department.id.desc()).all()
+        
+        # Convert the School objects to a list of dictionaries (JSON serializable)
+        departments_data = [{"name": department.name, 
+                            "id":department.id,
+                            "school": department.school,
+                            "department": department.department,
+                            "program": department.program}
+                        for department in post_department]
+    if request.method == 'DELETE':
+        department = Department.query.get(department_id)
 
-    db.session.delete(department)
-    db.session.commit()
-    post_department = Department.query.all()
-    
-     # Convert the School objects to a list of dictionaries (JSON serializable)
-    departments_data = [{"name": department.name, 
-                         "school": department.school,
-                        "department": department.department,
-                        "program": department.program}
-                    for department in post_department]
+        db.session.delete(department)
+        db.session.commit()
+        post_department = Department.query.all()
+        
+        # Convert the School objects to a list of dictionaries (JSON serializable)
+        departments_data = [{"name": department.name, 
+                            "school": department.school,
+                            "department": department.department,
+                            "program": department.program}
+                        for department in post_department]
 
     return departments_data
 
