@@ -12,7 +12,9 @@ from flask_cors import CORS
 app=Flask(__name__)
 
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:new_password@45.222.128.225:5432/maindb'
+
 app.config['SECRET_KEY'] =" thisismysecretkey"
 
 #'postgresql://postgres:new_password@45.222.128.225:5432/postgres'
@@ -60,6 +62,13 @@ class Year(db.Model):
     
     def __repr__(self):
         return f"Year('{self.id}', {self.name}')"
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "total": self.total
+        }
   
   
 class Student(db.Model):
@@ -88,7 +97,6 @@ class Staff(db.Model):
     offical_email = db.Column(db.String())
     personal_email = db.Column(db.String())
     password = db.Column(db.String())
-    position= db.Column(db.String())
     member_staff = db.Column(db.String())
     department_directorate_unit = db.Column(db.String())
     number = db.Column(db.String())
@@ -148,6 +156,40 @@ class Beneficianies(db.Model):
 def base():
     return render_template("base.html")
 
+@app.route('/uploadcsv', methods=['GET', 'POST'])
+def uploadcsv():
+    return render_template("uploadcsv.html")
+
+
+# @app.route('/staff', methods=['GET', 'POST'])
+# def method_name():
+#     form=Forstaff()
+#     if form.validate_on_submit():
+  
+#             new=Staff(name=form.name.data,
+#                  indexnumber=form.indexnumber.data,
+#                    gender=form.gender.data, 
+#                     school=form.school.data,
+#                     department=form.department.data,
+#                    yearCompleted=form.yearCompleted.data,
+#                    admitted=form.admitted.data,
+#                    email=form.email.data,  
+#                    telephone=form.telephone.data,  
+#                    hallofresidence=form.hallofresidence.data,  
+#                    nationality=form.nationality.data,  
+#                    address=form.address.data,  
+#                    work=form.work.data,  
+#                    guardian=form.guardian.data,  
+#                   marital=form.marital.data,
+#                   extra=form.extra.data,    
+            
+#                   )
+       
+#             db.session.add(new)
+#             db.session.commit()
+#     return render_template('schools.html', response=responseArray)
+
+
 
 @app.route('/staff', methods=['GET', 'POST'])
 def uploadCsv():
@@ -155,59 +197,55 @@ def uploadCsv():
     if request.method == 'POST':
          # Read the File using Flask request
         file = request.files['file']
-        file.filename = "name.csv"
+        file.filename = "name2.csv"
         # save file in local directory
         file.save(file.filename)
     
-    with open('name.csv', 'r') as csv_file:
+    with open('name2.csv', 'r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
 
         responseArray = []
-
-        # for c in CourseAllocation.query.all():
-        #     print(c)
-        #     db.session.delete(c)
-
-        next(csv_reader)
+        
+        # next(csv_reader)
 
         for line in csv_reader:
-            
-            
-            # print("316" + "/" + line["No."])
-            # print(line)
             print("--------------")
-            print(line.get("Id","null"))
-            print(line.get("Name","null"))
-            print(line.get("UssdCode","null"))
+            print(line.get("surname","Adumatta"))
+            print(line.get("firstname","Nana Kweku"))
+            print(line.get("maiden_name","Nelson"))
             responseArray.append(line)
+            
+            newStaffArray=[]
 
             # Course Allocation
             newStaff = Staff(
+                member_staff="Lecturer",
                 surname=(line.get("surname")),
-                firstname=(line.get("firstname")),
+                firstname=(line.get("first_name")),
                 maiden_name=(line.get("maiden_name")),
-                offical_email=(line.get("offical_email")),
+                offical_email=(line.get("official_email")),
                 personal_email=(line.get("personal_email")),
                 position=(line.get("position")),
-                department_directorate_unit=(line.get("department_directorate_unit")),
+                department_directorate_unit=(line.get("unit")),
                 number=(line.get("number")),
                 gender=(line.get("gender")),
-                rank=(line.get("rank")),  # Add a comma here
-                grade=(line.get("grade")),  # Add a comma here
+                rank=(line.get("rank")),  #Add a comma here
+                grade=(line.get("grade")),  #Add a comma here
                 job_title=(line.get("job_title")),  # Add a comma here
                 employment_status=(line.get("employment_status")) 
             )
-            print(newStaff)
             db.session.add(newStaff)
+            newStaffArray.append(newStaff.surname) 
         db.session.commit()
+        print(newStaff)
 
         response = {
-            "body":responseArray
+            "body":newStaffArray
         }
-        print(response)
-        pprint.pprint(responseArray)
-    return render_template("dashboard.html", response=responseArray)
-       
+    #     print(response)
+    #     pprint.pprint(responseArray)
+    # return render_template("dashboard.html", response=responseArray)
+    return response
 
 @app.route('/search', methods=['GET','POST'])
 def search():
@@ -364,28 +402,93 @@ def update_school(school_id):
 #     }
 #     return schools_data
 
+
+
+@app.route("/departments", methods=['GET', 'POST'])
+def newdepartment():
+    responseArray = []
+    if request.method == 'POST':
+         
+         # Read the File using Flask request
+        file = request.files['file']
+        file.filename = "name3.csv"
+        # save file in local directory
+        file.save(file.filename)
+    
+        with open('name3.csv', 'r') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+            responseArray = []
+            
+            next(csv_reader)
+
+            for line in csv_reader:
+                responseArray.append(line)
+                newDepartmentArray=[]
+                # Course Allocation
+                newDepartment = Department(
+                    name=(line.get("name")),
+                    school=(line.get("school")),
+                    department=(line.get("department")),
+                    program=(line.get("program"))
+                    
+                )
+                db.session.add(newDepartment)
+                newDepartmentArray.append(newDepartment.name)  
+            db.session.commit()
+            # print(newYear)
+
+            response = {
+                "body":newDepartmentArray
+            }
+            
+    elif request.method == 'GET':
+        departments = Department.query.all()
+        # return {"data":years[0]}
+        
+        alldepartments = []
+            
+        for d in departments:
+            department = {
+                "school":d.school,
+                "program":d.program,
+                "department":d.department,
+                "name":d.name,
+            }
+            
+            alldepartments.append(department)
+            
+        response = {
+            "data":alldepartments
+        }
+
+    return response
+
+
 @app.route('/departments', methods=['GET', 'POST'])
 def department_view():
     if request.method == 'GET':
-        responseArray = getalldepartments()
+        responseArray = newdepartment()
         print(responseArray)
         pprint.pprint(responseArray)
     return render_template('departments.html', response=responseArray)
    
-@app.route("/api/v1/departments", methods=['GET', 'POST'])
-def getalldepartments():
-    if request.method == 'GET':
-        departments = Department.query.order_by(Department.id.desc()).all()
-        departments_data = [{
-            "id": department.id,
-            "name": department.name,
-            "department": department.department,
-            "school": department.school,
-            "program": department.program
-        } for department in departments]
-        #return jsonify(departments_data)
-    
-    elif request.method == 'POST':
+# @app.route("/api/v1/departments", methods=['GET', 'POST'])
+# def getalldepartments():
+#     if request.method == 'GET':
+#         departments = Department.query.order_by(Department.id.desc()).all()
+#         departments_data = [{
+#             "id": department.id,
+#             "name": department.name,
+#             "department": department.department,
+#             "school": department.school,
+#             "program": department.program
+#         } for department in departments]
+#         #return jsonify(departments_data)
+
+
+@app.route("/newdepartments", methods=['GET', 'POST'])
+def newdepartments():   
+    if request.method == 'POST':
         body = request.get_json()
         new_department = Department(
             name=body["name"],
@@ -565,17 +668,74 @@ def update_students(student_id):
 
 
 @app.route("/years", methods=['GET', 'POST'])
-def year():
-    if request.method == 'GET':
-        years = Year.query.order_by(Year.id.desc()).all()
-        years_data = [{
-                            "name": year.name, 
-                            "id":year.id,
-                            "total":year.total
-        } for year in years]
-        return jsonify(years_data)
+def years():
+    responseArray = []
+    if request.method == 'POST':
+         
+         # Read the File using Flask request
+        file = request.files['file']
+        file.filename = "name3.csv"
+        # save file in local directory
+        file.save(file.filename)
     
-    elif request.method == 'POST':
+        with open('name2.csv', 'r') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+            responseArray = []
+            
+            next(csv_reader)
+
+            for line in csv_reader:
+                responseArray.append(line)
+                newYearArray=[]
+                # Course Allocation
+                newYear = Year(
+                    name=(line.get("name")),
+                    total=(line.get("total")),
+                )
+                db.session.add(newYear)
+                newYearArray.append(newYear.name)  
+            db.session.commit()
+            # print(newYear)
+
+            response = {
+                "body":newYearArray
+            }
+            
+    elif request.method == 'GET':
+        years = Year.query.all()
+        # return {"data":years[0]}
+        
+        allyears = []
+            
+        for y in years:
+            year = {
+                "total":y.total,
+                "name":y.name,
+            }
+            
+            allyears.append(year)
+            
+        response = {
+            "data":allyears
+        }
+        
+      
+    
+    return response
+
+# def year():
+#     if request.method == 'GET':
+#         years = Year.query.order_by(Year.id.desc()).all()
+#         years_data = [{
+#                             "name": year.name, 
+#                             "id":year.id,
+#                             "total":year.total
+#         } for year in years]
+#         return jsonify(years_data)
+@app.route("/newyear", methods=['GET', 'POST'])
+def newyear():
+
+    if request.method == 'POST':
             body = request.get_json()
             year_new = Year(name=body["name"],
                                 total=body["total"],
@@ -590,9 +750,7 @@ def year():
                                 }
                             for year in post_year]
             
-            # response_body = {
-            #     "data":post_student
-            # }
+           
             return jsonify(years_data)
 
   
