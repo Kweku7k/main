@@ -407,6 +407,7 @@ def update_school(school_id):
 @app.route("/departments", methods=['GET', 'POST'])
 def newdepartment():
     responseArray = []
+    
     if request.method == 'POST':
          
          # Read the File using Flask request
@@ -418,12 +419,12 @@ def newdepartment():
         with open('name3.csv', 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
             responseArray = []
-            
+            newDepartmentArray=[]
             next(csv_reader)
 
             for line in csv_reader:
                 responseArray.append(line)
-                newDepartmentArray=[]
+                # newDepartmentArray=[]
                 # Course Allocation
                 newDepartment = Department(
                     name=(line.get("name")),
@@ -434,10 +435,14 @@ def newdepartment():
                 )
                 db.session.add(newDepartment)
                 newDepartmentArray.append(newDepartment.name)  
-            db.session.commit()
-            # print(newYear)
+        db.session.commit()
+        
+        print("Data from CSV:", responseArray)
+        print("New Department Array:", newDepartmentArray)
+   # print(newYear)
 
-            response = {
+        response = {
+                "message": "Data added to the database successfully.",
                 "body":newDepartmentArray
             }
             
