@@ -448,7 +448,6 @@ def update_department(department_id):
 
 
 
-
 @app.route('/students', methods=['GET', 'POST'])
 def students_view():
     if request.method == 'GET':
