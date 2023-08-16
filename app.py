@@ -9,6 +9,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 
 
+
 app=Flask(__name__)
 
 CORS(app)
@@ -358,6 +359,8 @@ def update_school(school_id):
 
     return schools_data
 
+
+
 # #school get request.
 # @app.route('/school', methods=['GET', 'POST'])
 # def school():
@@ -404,12 +407,38 @@ def update_school(school_id):
 
 
 
-@app.route("/departments", methods=['GET', 'POST'])
-def newdepartment():
+@app.route('/departments', methods=['GET', 'POST'])
+def department_view():
+    if request.method == 'GET':
+        responseArray = getalldepartment()
+        print("--------------")
+        print(responseArray)
+        pprint.pprint(responseArray)
+    return render_template('departments.html', response=responseArray["data"])
+  
+
+@app.route("/api/v1/departments", methods=['GET', 'POST'])
+def getalldepartment():
     responseArray = []
-    
-    if request.method == 'POST':
-         
+    if request.method == 'GET':
+        departments = Department.query.all()
+        alldepartments = []
+        
+        for d in departments:
+            department = {
+                "school":d.school,
+                "program":d.program,
+                "department":d.department,
+                "name":d.name,
+                        }
+            
+            alldepartments.append(department)   
+             
+        response = {
+            "data":alldepartments
+                    }
+              
+    elif request.method == 'POST':
          # Read the File using Flask request
         file = request.files['file']
         file.filename = "name3.csv"
@@ -419,64 +448,30 @@ def newdepartment():
         with open('name3.csv', 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
             responseArray = []
-            newDepartmentArray=[]
+            
             next(csv_reader)
 
             for line in csv_reader:
                 responseArray.append(line)
-                # newDepartmentArray=[]
+                newDepartmentArray=[]
                 # Course Allocation
                 newDepartment = Department(
                     name=(line.get("name")),
                     school=(line.get("school")),
                     department=(line.get("department")),
-                    program=(line.get("program"))
-                    
+                    program=(line.get("program"))    
                 )
                 db.session.add(newDepartment)
                 newDepartmentArray.append(newDepartment.name)  
-        db.session.commit()
-        
-        print("Data from CSV:", responseArray)
-        print("New Department Array:", newDepartmentArray)
-   # print(newYear)
-
-        response = {
-                "message": "Data added to the database successfully.",
+            db.session.commit()
+            response = {
+                "message": "this works.",
                 "body":newDepartmentArray
             }
-            
-    elif request.method == 'GET':
-        departments = Department.query.all()
-        # return {"data":years[0]}
-        
-        alldepartments = []
-            
-        for d in departments:
-            department = {
-                "school":d.school,
-                "program":d.program,
-                "department":d.department,
-                "name":d.name,
-            }
-            
-            alldepartments.append(department)
-            
-        response = {
-            "data":alldepartments
-        }
-
     return response
 
 
-@app.route('/departments', methods=['GET', 'POST'])
-def department_view():
-    if request.method == 'GET':
-        responseArray = newdepartment()
-        print(responseArray)
-        pprint.pprint(responseArray)
-    return render_template('departments.html', response=responseArray)
-   
+
 # @app.route("/api/v1/departments", methods=['GET', 'POST'])
 # def getalldepartments():
 #     if request.method == 'GET':
@@ -491,7 +486,7 @@ def department_view():
 #         #return jsonify(departments_data)
 
 
-@app.route("/newdepartments", methods=['GET', 'POST'])
+@app.route("/api/v1/departments", methods=['GET', 'POST'])
 def newdepartments():   
     if request.method == 'POST':
         body = request.get_json()
@@ -562,26 +557,77 @@ def students_view():
         responseArray = getallstudents()
         print(responseArray)
         pprint.pprint(responseArray)
-    return render_template('students.html', response=responseArray)
-   
+    return render_template('students.html', response=responseArray["data"])
+  
+
 @app.route("/api/v1/students", methods=['GET', 'POST'])
 def getallstudents():
+    responseArray = []
     if request.method == 'GET':
-        students = Student.query.order_by(Student.id.desc()).all()
-        students_data = [{
-                            "name": student.name, 
-                            "school": student.school,
-                            "id": student.id,
-                            "department": student.department,
-                            "program": student.program,
-                            "email":student.email,
-                            "password":student.password,
-                            "telephone":student.telephone,
-                            "bio":student.bio,
-                            "current_company":student.current_company,
-                            "socials":student.socials
-        } for student in students]
+        students = Student.query.all()
+        allstudents = []
+        
+        for s in students:
+            student = {
+                            "name": s.name, 
+                            "school": s.school,
+                            "department": s.department,
+                            "program": s.program,
+                            "email":s.email,
+                            "password":s.password,
+                            "telephone":s.telephone,
+                            "bio":s.bio,
+                            "current_company":s.current_company,
+                            "socials":s.socials
+                        }
+            
+            allstudents.append(student)   
+             
+        response = {
+            "data":allstudents
+                    }
+              
     elif request.method == 'POST':
+         # Read the File using Flask request
+        file = request.files['file']
+        file.filename = "name3.csv"
+        # save file in local directory
+        file.save(file.filename)
+    
+        with open('name3.csv', 'r') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+            responseArray = []
+            
+            next(csv_reader)
+
+            for line in csv_reader:
+                responseArray.append(line)
+                newstudentArray=[]
+                # Course Allocation
+                newStudent = Student(
+                    name=(line.get("name")),
+                    school=(line.get("school")),
+                    department=(line.get("department")),
+                    email=(line.get("email")),  
+                    bio=(line.get("bio")),
+                    socials=(line.get("socials")),    
+                    telephone=(line.get("telephone")),    
+                    password=(line.get("password")),       
+                    program=(line.get("program")),       
+                    current_company=(line.get("current_company"))       
+                )
+                db.session.add(newStudent)
+                newstudentArray.append(newStudent.name)  
+            db.session.commit()
+            response = {
+                "body":newstudentArray
+            }
+    return response 
+
+
+@app.route("/api/v1/newstudents", methods=['GET', 'POST'])
+def post_newstudents():
+    if request.method == 'POST':
         body = request.get_json()
         new_student = Student(name=body["name"],
                               school=body["school"],
@@ -612,6 +658,9 @@ def getallstudents():
                         for student in post_student]
     return students_data
         
+          
+          
+          
           
     
 #STUDENT UPDATE
@@ -669,14 +718,36 @@ def update_students(student_id):
 
 
 
+@app.route('/years', methods=['GET', 'POST'])
+def year_view():
+    if request.method == 'GET':
+        responseArray = getallyears()
+        print(responseArray)
+        pprint.pprint(responseArray)
+    return render_template('year.html', response=responseArray["data"])
+   
 
 
-
-@app.route("/years", methods=['GET', 'POST'])
-def years():
+@app.route("/api/v1/years", methods=['GET', 'POST'])
+def getallyears():
     responseArray = []
-    if request.method == 'POST':
-         
+    if request.method == 'GET':
+        years = Year.query.all()
+        # return {"data":years[0]}
+        
+        allyears = []
+            
+        for y in years:
+            year = {
+                "total":y.total,
+                "name":y.name,
+            }
+            
+            allyears.append(year)
+        response = {
+            "data":allyears
+        }   
+    elif request.method == 'POST':
          # Read the File using Flask request
         file = request.files['file']
         file.filename = "name3.csv"
@@ -704,28 +775,7 @@ def years():
 
             response = {
                 "body":newYearArray
-            }
-            
-    elif request.method == 'GET':
-        years = Year.query.all()
-        # return {"data":years[0]}
-        
-        allyears = []
-            
-        for y in years:
-            year = {
-                "total":y.total,
-                "name":y.name,
-            }
-            
-            allyears.append(year)
-            
-        response = {
-            "data":allyears
-        }
-        
-      
-    
+            }   
     return response
 
 # def year():
@@ -737,8 +787,10 @@ def years():
 #                             "total":year.total
 #         } for year in years]
 #         return jsonify(years_data)
-@app.route("/newyear", methods=['GET', 'POST'])
-def newyear():
+
+
+@app.route("/api/v1/year", methods=['GET', 'POST'])
+def post_newyear():
 
     if request.method == 'POST':
             body = request.get_json()
@@ -755,7 +807,6 @@ def newyear():
                                 }
                             for year in post_year]
             
-           
             return jsonify(years_data)
 
   

@@ -6,7 +6,7 @@
 
                
 
-  <h4>departments</h4>
+  <h4>years</h4>
   <br>
   
   <div class="row" style="justify-content: space-between;">
@@ -18,10 +18,9 @@
                 <img src="static/img/memoji.png" alt="" width="100%" >
               </div>
               
-        <p class="text-muted" style="margin-left:20px; font-size:20px;">{{ item.name }}<br>
-          <span class="dashboard-item-text">{{ item.school}}</span>
-          <span class="dashboard-item-text">{{ item.department}}</span>
-        </p>
+        <p class="text-muted" style="margin-left:20px; font-size:20px;">
+            {{item.name}}<br><span class="dashboard-item-text">
+                {{item.total}}</span></p>
     </div>
 
       </div>
