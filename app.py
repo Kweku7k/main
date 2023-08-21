@@ -25,16 +25,16 @@ migrate = Migrate(app, db)
 
 
 
-class Lecturers(db.Model):
-    id= db.Column(db.Integer, primary_key=True)
-    email= db.Column(db.String(20) )
-    name= db.Column(db.String(200) )
-    password= db.Column(db.String(200) )
-    school = db.Column(db.String(20) )
-    image= db.Column(db.String(10)  )
-    telephone= db.Column(db.String(10)  )
-    def __repr__(self):
-        return f"Lecturers('{self.id}', {self.name}', {self.email})"
+# class Lecturers(db.Model):
+#     id= db.Column(db.Integer, primary_key=True)
+#     email= db.Column(db.String(20) )
+#     name= db.Column(db.String(200) )
+#     password= db.Column(db.String(200) )
+#     school = db.Column(db.String(20) )
+#     image= db.Column(db.String(10)  )
+#     telephone= db.Column(db.String(10)  )
+#     def __repr__(self):
+#         return f"Lecturers('{self.id}', {self.name}', {self.email})"
   
 class School(db.Model):
     id= db.Column(db.Integer, primary_key=True)
