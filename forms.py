@@ -13,3 +13,22 @@ class Forlecturer(FlaskForm):
     submit = SubmitField('Login')
     
     
+    
+class Forstaff(FlaskForm):
+    surname= StringField('surname', validators=[DataRequired()])
+    firstname = StringField('firstname', validators=[DataRequired()])
+    maiden_name = StringField('maiden_name', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    offical_email= StringField('offical_email', validators=[DataRequired()])
+    personal_email = StringField('personal_email', validators=[DataRequired()])
+    position = StringField('position', validators=[DataRequired()])
+    department_directorate_unit = StringField('department_directorate_unit', validators=[DataRequired()])
+    number = StringField('number', validators=[DataRequired()])
+    gender = StringField('gender', validators=[DataRequired()])
+    gender = StringField('gender', validators=[DataRequired()])
+    rank = StringField('rank', validators=[DataRequired()])
+    job_title = StringField('job_title', validators=[DataRequired()])
+    employment_status = StringField('employment_status', validators=[DataRequired()])
+    submit = SubmitField('Login')
+    
+    
